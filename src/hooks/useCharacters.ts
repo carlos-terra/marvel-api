@@ -1,0 +1,33 @@
+import axios, { AxiosError } from 'axios';
+import { useQuery } from 'react-query';
+import { Character } from '../store/useCharactersStore';
+
+const useCharacters = () => {
+  return useQuery<Character[], AxiosError>({
+    queryKey: 'characters',
+    queryFn: fetchCharacters,
+    onError: error => {
+      console.error('Failed to fetch characters:', error.message);
+    },
+    staleTime: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
+};
+
+const fetchCharacters = async () => {
+  try {
+    const { data } = await axios.get(
+      'https://gateway.marvel.com:443/v1/public/characters?apikey=c9d300f94a038b4c02f5592fa6e1ec11'
+    );
+    const characters = data.data.results.map((character: Character) => ({
+      id: character.id,
+      name: character.name,
+      thumbnail: character.thumbnail,
+    }));
+    return characters;
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    throw new Error(`Failed to fetch properties: ${axiosError.message}`);
+  }
+};
+
+export default useCharacters;
