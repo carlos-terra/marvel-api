@@ -4,9 +4,16 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { useState } from 'react';
 import logo from './assets/marvel-logo.svg';
+import CharacterPagination from './components/CharactersPagination';
+import UsePagination from './hooks/usePagination';
 
 function App() {
   const [queryClient] = useState(() => new QueryClient());
+  const { offset, setOffset } = UsePagination();
+
+  const handlePageChange = (event, value) => {
+    setOffset(value);
+  };
 
   return (
     <>
@@ -18,7 +25,10 @@ function App() {
         />
       </div>
       <QueryClientProvider client={queryClient}>
-        <CharacterList />
+        <CharacterList offset={offset} />
+        <div className="flex justify-center py-10">
+          <CharacterPagination onPageChange={handlePageChange} />
+        </div>
         <ReactQueryDevtools />
       </QueryClientProvider>
     </>

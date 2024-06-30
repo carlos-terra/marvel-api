@@ -1,13 +1,24 @@
 import axios, { AxiosError } from 'axios';
 import { useQuery } from 'react-query';
-import { Character } from '../store/useCharactersStore';
 
-const MARVEL_API_KEY = import.meta.env.VITE_REACT_APP_API_KEY;
+export interface Character {
+  id: number;
+  name: string;
+  thumbnail: {
+    path: string;
+    extension: string;
+  };
+}
 
-const useCharacters = () => {
-  return useQuery<Character[] | undefined, AxiosError>({
-    queryKey: 'characters',
-    queryFn: fetchCharacters,
+interface CharactersData {
+  characters: Character[];
+  total: number;
+}
+
+const useCharacters = (offset: number) => {
+  return useQuery<CharactersData, AxiosError>({
+    queryKey: ['characters', offset],
+    queryFn: () => fetchCharacters(offset),
     onError: error => {
       console.error('Failed to fetch characters:', error.message);
     },
@@ -15,17 +26,18 @@ const useCharacters = () => {
   });
 };
 
-const fetchCharacters = async () => {
+const fetchCharacters = async (offset?: number) => {
+  const MARVEL_API_KEY = import.meta.env.VITE_REACT_APP_API_KEY;
   try {
     const { data } = await axios.get(
-      `https://gateway.marvel.com:443/v1/public/characters?apikey=${MARVEL_API_KEY}`
+      `https://gateway.marvel.com:443/v1/public/characters?apikey=${MARVEL_API_KEY}&offset=${offset}`
     );
-    const characters = data.data.results.map((character: Character) => ({
+    const characters = data?.data.results.map((character: Character) => ({
       id: character.id,
       name: character.name,
       thumbnail: character.thumbnail,
     }));
-    return characters;
+    return { characters, total: data.data.total };
   } catch (error) {
     const axiosError = error as AxiosError;
     throw new Error(`Failed to fetch properties: ${axiosError.message}`);
