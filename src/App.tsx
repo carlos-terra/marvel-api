@@ -9,7 +9,7 @@ function App() {
     <>
       <div className="flex justify-center">
         <img
-          className="w-48 md:w-72 pt-4 pb-10 transition-all duration-500 hover:scale-110"
+          className="w-48 md:w-60 pt-4 pb-10 transition-all duration-500 hover:scale-110"
           src={logo}
           alt="Marvel"
         />

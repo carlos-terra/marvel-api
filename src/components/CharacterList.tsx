@@ -4,6 +4,8 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import useCharacters from '../hooks/useCharacters';
 import { usePaginationStore } from '../store/usePaginationStore';
+import Modal from './Modal';
+import { useState } from 'react';
 
 const Item = styled(Paper)(({ theme }) => ({
   position: 'relative',
@@ -37,7 +39,6 @@ const Label = styled('div')({
 const Thumbnail = styled('img')({
   borderRadius: 12,
   display: 'block',
-  width: '100%',
 });
 
 const CharacterList = () => {
@@ -47,21 +48,28 @@ const CharacterList = () => {
 
   const { data: characterData } = useCharacters(offset);
 
+  const [isModalVisible, setModalVisible] = useState(false);
+
   return characterData ? (
-    <Box sx={{ width: '100%', minHeight: 253 }}>
-      <Masonry columns={{ xs: 3, sm: 4 }} spacing={2}>
-        {characterData.characters.map((character, index) => (
-          <Item key={index}>
-            <Label>{character.name}</Label>
-            <Thumbnail
-              src={`${character.thumbnail.path}.${character.thumbnail.extension}`}
-              alt={character.name}
-              loading="lazy"
-            />
-          </Item>
-        ))}
-      </Masonry>
-    </Box>
+    <>
+      <Box sx={{ width: '100%', minHeight: 253 }}>
+        <Masonry columns={{ xs: 3, sm: 4 }} spacing={2}>
+          {characterData.characters.map((character, index) => (
+            <Item key={index} onClick={() => setModalVisible(true)}>
+              <Label>{character.name}</Label>
+              <Thumbnail
+                src={`${character.thumbnail.path}.${character.thumbnail.extension}`}
+                alt={character.name}
+                loading="lazy"
+              />
+            </Item>
+          ))}
+        </Masonry>
+        <Modal open={isModalVisible} onClose={() => setModalVisible(false)}>
+          <div>Modal content</div>
+        </Modal>
+      </Box>
+    </>
   ) : null;
 };
 
