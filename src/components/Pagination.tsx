@@ -1,4 +1,4 @@
-import Pagination from '@mui/material/Pagination';
+import MuiPagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/system';
 import useCharacters from '../hooks/useCharacters';
@@ -8,7 +8,7 @@ import {
   setOffset,
 } from '../store/usePaginationStore';
 
-const CustomPagination = styled(Pagination)(({ theme }) => ({
+const CustomPagination = styled(MuiPagination)(({ theme }) => ({
   ul: {
     '& .MuiPaginationItem-root': {
       color: '#fff',
@@ -16,7 +16,7 @@ const CustomPagination = styled(Pagination)(({ theme }) => ({
   },
 }));
 
-const CharactersPagination = () => {
+const Pagination = () => {
   const PAGINATION_OFFSET = 20;
 
   const { page, offset } = usePaginationStore(state => ({
@@ -46,4 +46,4 @@ const CharactersPagination = () => {
   ) : null;
 };
 
-export default CharactersPagination;
+export default Pagination;

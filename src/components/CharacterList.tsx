@@ -11,7 +11,7 @@ const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   textAlign: 'center',
   color: theme.palette.text.secondary,
-  borderRadius: 15,
+  borderRadius: 12,
   '&:hover div': {
     visibility: 'visible',
     cursor: 'pointer',
@@ -29,13 +29,13 @@ const Label = styled('div')({
   color: '#fff',
   padding: '0.5em',
   boxSizing: 'border-box',
-  borderRadius: 15,
+  borderRadius: 12,
   fontSize: '1.1rem',
   fontWeight: 'bold',
 });
 
 const Thumbnail = styled('img')({
-  borderRadius: 15,
+  borderRadius: 12,
   display: 'block',
   width: '100%',
 });
