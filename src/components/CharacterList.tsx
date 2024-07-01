@@ -6,12 +6,39 @@ import useCharacters from '../hooks/useCharacters';
 import { usePaginationStore } from '../store/usePaginationStore';
 
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  position: 'relative',
+  backgroundColor: 'transparent',
   ...theme.typography.body2,
-  padding: theme.spacing(0.5),
   textAlign: 'center',
   color: theme.palette.text.secondary,
+  borderRadius: 15,
+  '&:hover div': {
+    visibility: 'visible',
+    cursor: 'pointer',
+  },
 }));
+
+const Label = styled('div')({
+  position: 'absolute',
+  top: 0,
+  right: 0,
+  bottom: 0,
+  left: 0,
+  visibility: 'hidden',
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  color: '#fff',
+  padding: '0.5em',
+  boxSizing: 'border-box',
+  borderRadius: 15,
+  fontSize: '1.1rem',
+  fontWeight: 'bold',
+});
+
+const Thumbnail = styled('img')({
+  borderRadius: 15,
+  display: 'block',
+  width: '100%',
+});
 
 const CharacterList = () => {
   const { offset } = usePaginationStore(state => ({
@@ -25,16 +52,11 @@ const CharacterList = () => {
       <Masonry columns={{ xs: 3, sm: 4 }} spacing={2}>
         {characterData.characters.map((character, index) => (
           <Item key={index}>
-            <img
+            <Label>{character.name}</Label>
+            <Thumbnail
               src={`${character.thumbnail.path}.${character.thumbnail.extension}`}
               alt={character.name}
               loading="lazy"
-              style={{
-                borderBottomLeftRadius: 4,
-                borderBottomRightRadius: 4,
-                display: 'block',
-                width: '100%',
-              }}
             />
           </Item>
         ))}
