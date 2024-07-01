@@ -8,6 +8,7 @@ export interface Character {
     path: string;
     extension: string;
   };
+  description: string;
 }
 
 interface CharactersData {
@@ -36,6 +37,7 @@ const fetchCharacters = async (offset?: number) => {
       id: character.id,
       name: character.name,
       thumbnail: character.thumbnail,
+      description: character.description,
     }));
     return { characters, total: data.data.total };
   } catch (error) {
