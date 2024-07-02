@@ -1,15 +1,6 @@
 import axios, { AxiosError } from 'axios';
+import { Character } from '../entities';
 import { useQuery } from 'react-query';
-
-export interface Character {
-  id: number;
-  name: string;
-  thumbnail: {
-    path: string;
-    extension: string;
-  };
-  description: string;
-}
 
 interface CharactersData {
   characters: Character[];

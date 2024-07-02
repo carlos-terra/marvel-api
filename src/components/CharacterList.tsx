@@ -1,11 +1,21 @@
-import { styled } from '@mui/material/styles';
 import Masonry from '@mui/lab/Masonry';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import useCharacters, { Character } from '../hooks/useCharacters';
-import { usePaginationStore } from '../store/usePaginationStore';
-import Modal from './Modal';
+import { styled } from '@mui/material/styles';
 import { useState } from 'react';
+import useCharacters from '../hooks/useCharacters';
+import {
+  useCharacterStore,
+  setSelectedCharacter,
+} from '../store/useCharacterStore';
+import { usePaginationStore } from '../store/usePaginationStore';
+import CharacterSeries from './CharacterSeries';
+import Modal from './Modal';
+
+interface ThumbnailProps {
+  width?: string;
+  minWidth?: string;
+}
 
 const Item = styled(Paper)(({ theme }) => ({
   position: 'relative',
@@ -36,22 +46,20 @@ const Label = styled('div')({
   fontWeight: 'bold',
 });
 
-const Thumbnail = styled('img')<{ width?: string; height?: string }>(
-  ({ width = 'auto', height = 'auto' }) => ({
+const Thumbnail = styled('img')<ThumbnailProps>(
+  ({ width = 'auto', minWidth = 'auto' }) => ({
     borderRadius: 12,
     display: 'block',
     width: width,
-    height: height,
+    minWidth: minWidth,
   })
 );
 
 const CharacterList = () => {
-  const { offset } = usePaginationStore(state => ({
-    offset: state.offset,
-  }));
+  const offset = usePaginationStore(s => s.offset);
 
+  const selectedCharacter = useCharacterStore(s => s.selectedCharacter);
   const { data: characterData } = useCharacters(offset);
-  const [selectedCharacter, setSelectedCharacter] = useState<Character>();
 
   const [isModalVisible, setModalVisible] = useState(false);
 
@@ -60,14 +68,13 @@ const CharacterList = () => {
       current => current.id === id
     );
     setSelectedCharacter(currentCharacter);
-
     setModalVisible(true);
   };
 
   return characterData ? (
     <>
-      <Box sx={{ width: '100%', minHeight: 253 }}>
-        <Masonry columns={{ xs: 3, sm: 4 }} spacing={2}>
+      <Box sx={{ width: '100%' }}>
+        <Masonry columns={{ xs: 1, sm: 2, md: 3, lg: 4 }} spacing={2}>
           {characterData.characters.map(character => {
             const { id, name, thumbnail } = character;
             return (
@@ -77,23 +84,22 @@ const CharacterList = () => {
                   src={`${thumbnail.path}.${thumbnail.extension}`}
                   alt={name}
                   loading="lazy"
+                  minWidth="188px"
                 />
               </Item>
             );
           })}
         </Masonry>
         <Modal open={isModalVisible} onClose={() => setModalVisible(false)}>
-          <div className="flex">
-            <div className="pr-12 flex-1">
+          <div className="flex pb-20">
+            <div className="pr-12 w-2/5">
               <Thumbnail
                 src={`${selectedCharacter?.thumbnail.path}.${selectedCharacter?.thumbnail.extension}`}
                 alt={selectedCharacter?.name}
                 loading="lazy"
-                width="100%"
-                height="100%"
               />
             </div>
-            <div className="flex-1">
+            <div className="w-3/5 overflow-y-auto">
               <div className="text-2xl pt-2 pb-6">
                 {selectedCharacter?.name}
               </div>
@@ -104,6 +110,7 @@ const CharacterList = () => {
               ) : (
                 <div className="text-lg">Description Not Avaialble</div>
               )}
+              <CharacterSeries characterId={selectedCharacter?.id as number} />
             </div>
           </div>
         </Modal>

@@ -2,6 +2,23 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+.modal-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.modal-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Cor de fundo da barra de rolagem */
+}
+
+.modal-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #c7c7c7; /* Cor do controle deslizante da barra de rolagem */
+  border-radius: 6px;
+}
+
+.modal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #888; /* Cor do controle deslizante da barra de rolagem ao passar o mouse */
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -32,6 +49,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  overflow-y: auto;
 }
 
 h1 {
@@ -49,13 +67,6 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
 @media (prefers-color-scheme: light) {

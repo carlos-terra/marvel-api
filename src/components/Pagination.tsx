@@ -8,7 +8,7 @@ import {
   setOffset,
 } from '../store/usePaginationStore';
 
-const CustomPagination = styled(MuiPagination)(({ theme }) => ({
+const CustomPagination = styled(MuiPagination)(() => ({
   ul: {
     '& .MuiPaginationItem-root': {
       color: '#fff',
