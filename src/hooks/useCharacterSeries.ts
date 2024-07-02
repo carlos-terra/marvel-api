@@ -15,10 +15,12 @@ const fetchCharacterSeries = async ({
   characterId: number | null;
 }) => {
   const MARVEL_API_KEY = import.meta.env.VITE_REACT_APP_API_KEY;
+  const RESULTS_LIMIT = 20;
+
   try {
     const { data } = await axios.get(
       `https://gateway.marvel.com:443/v1/public/characters/${characterId}/series?apikey=${MARVEL_API_KEY}&offset=${
-        pageParam * 20
+        pageParam * RESULTS_LIMIT
       }`
     );
     const series = data?.data.results.map((series: Series) => ({

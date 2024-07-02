@@ -1,6 +1,7 @@
 import React from 'react';
 import useCharacterSeries from '../hooks/useCharacterSeries';
 import { Series } from '../entities';
+import Accordion from './Accordion';
 
 const CharacterSeries = ({ characterId }: { characterId: number }) => {
   const {
@@ -21,13 +22,16 @@ const CharacterSeries = ({ characterId }: { characterId: number }) => {
       {data?.pages.map((page, i) => (
         <React.Fragment key={i}>
           {page.series.map((series: Series) => (
-            <div key={series.id}>
-              <h3>{series.title}</h3>
-              <img
-                src={`${series.thumbnail.path}.${series.thumbnail.extension}`}
-                alt={series.title}
-              />
-              <p>{series.description}</p>
+            <div className="w-full mx-5" key={series.id}>
+              <Accordion title={series.title}>
+                <div>
+                  <img
+                    src={`${series.thumbnail.path}.${series.thumbnail.extension}`}
+                    alt={series.title}
+                  />
+                  <p>{series.description}</p>
+                </div>
+              </Accordion>
             </div>
           ))}
         </React.Fragment>

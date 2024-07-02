@@ -4,18 +4,11 @@ import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import useCharacters from '../hooks/useCharacters';
-import {
-  useCharacterStore,
-  setSelectedCharacter,
-} from '../store/useCharacterStore';
+import { setSelectedCharacter } from '../store/useCharacterStore';
 import { usePaginationStore } from '../store/usePaginationStore';
-import CharacterSeries from './CharacterSeries';
 import Modal from './Modal';
-
-interface ThumbnailProps {
-  width?: string;
-  minWidth?: string;
-}
+import CharacterDetails from './CharacterDetails';
+import Thumbnail from './CharacterThumbnail';
 
 const Item = styled(Paper)(({ theme }) => ({
   position: 'relative',
@@ -46,19 +39,9 @@ const Label = styled('div')({
   fontWeight: 'bold',
 });
 
-const Thumbnail = styled('img')<ThumbnailProps>(
-  ({ width = 'auto', minWidth = 'auto' }) => ({
-    borderRadius: 12,
-    display: 'block',
-    width: width,
-    minWidth: minWidth,
-  })
-);
-
 const CharacterList = () => {
   const offset = usePaginationStore(s => s.offset);
 
-  const selectedCharacter = useCharacterStore(s => s.selectedCharacter);
   const { data: characterData } = useCharacters(offset);
 
   const [isModalVisible, setModalVisible] = useState(false);
@@ -74,45 +57,22 @@ const CharacterList = () => {
   return characterData ? (
     <>
       <Box sx={{ width: '100%' }}>
-        <Masonry columns={{ xs: 1, sm: 2, md: 3, lg: 4 }} spacing={2}>
+        <Masonry columns={{ xs: 2, sm: 3, lg: 4 }} spacing={2}>
           {characterData.characters.map(character => {
-            const { id, name, thumbnail } = character;
+            const { id, name } = character;
             return (
               <Item key={id} onClick={() => handleCharacterClick(id)}>
                 <Label>{name}</Label>
                 <Thumbnail
-                  src={`${thumbnail.path}.${thumbnail.extension}`}
-                  alt={name}
-                  loading="lazy"
-                  minWidth="188px"
+                  src={`${character?.thumbnail.path}.${character?.thumbnail.extension}`}
+                  name={character?.name}
                 />
               </Item>
             );
           })}
         </Masonry>
         <Modal open={isModalVisible} onClose={() => setModalVisible(false)}>
-          <div className="flex pb-20">
-            <div className="pr-12 w-2/5">
-              <Thumbnail
-                src={`${selectedCharacter?.thumbnail.path}.${selectedCharacter?.thumbnail.extension}`}
-                alt={selectedCharacter?.name}
-                loading="lazy"
-              />
-            </div>
-            <div className="w-3/5 overflow-y-auto">
-              <div className="text-2xl pt-2 pb-6">
-                {selectedCharacter?.name}
-              </div>
-              {selectedCharacter?.description ? (
-                <div className="text-lg">
-                  Description: {selectedCharacter?.description}
-                </div>
-              ) : (
-                <div className="text-lg">Description Not Avaialble</div>
-              )}
-              <CharacterSeries characterId={selectedCharacter?.id as number} />
-            </div>
-          </div>
+          <CharacterDetails />
         </Modal>
       </Box>
     </>

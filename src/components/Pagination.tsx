@@ -39,7 +39,7 @@ const Pagination = () => {
         count={Math.ceil(characterData?.total / PAGINATION_OFFSET)}
         variant="outlined"
         size="large"
-        color="secondary"
+        color="primary"
         onChange={handlePageChange}
       />
     </Stack>
