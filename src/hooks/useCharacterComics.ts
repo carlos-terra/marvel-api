@@ -1,13 +1,13 @@
 import axios, { AxiosError } from 'axios';
 import { useInfiniteQuery } from 'react-query';
-import { Serie } from '../entities';
+import { Comic } from '../entities';
 
-interface SeriesData {
-  series: Serie[];
+interface ComicsData {
+  comics: Comic[];
   total: number;
 }
 
-const fetchSeries = async ({
+const fetchComics = async ({
   pageParam = 0,
   characterId,
 }: {
@@ -19,36 +19,36 @@ const fetchSeries = async ({
 
   try {
     const { data } = await axios.get(
-      `https://gateway.marvel.com:443/v1/public/characters/${characterId}/series?apikey=${MARVEL_API_KEY}&offset=${
+      `https://gateway.marvel.com:443/v1/public/characters/${characterId}/comics?apikey=${MARVEL_API_KEY}&offset=${
         pageParam * RESULTS_LIMIT
       }`
     );
-    const series = data?.data.results.map((series: Serie) => ({
+    const comics = data?.data.results.map((series: Comic) => ({
       id: series.id,
       title: series.title,
       thumbnail: series.thumbnail,
       description: series.description,
     }));
-    return { series, total: data.data.total };
+    return { comics, total: data.data.total };
   } catch (error) {
     const axiosError = error as AxiosError;
     throw new Error(`Failed to fetch series: ${axiosError.message}`);
   }
 };
 
-const useCharacterSeries = (characterId: number | undefined) => {
-  return useInfiniteQuery<SeriesData, AxiosError>({
-    queryKey: ['characterSeries', characterId],
-    queryFn: ({ pageParam = 0 }) => fetchSeries({ pageParam, characterId }),
+const useCharacterComics = (characterId: number | undefined) => {
+  return useInfiniteQuery<ComicsData, AxiosError>({
+    queryKey: ['characterComics', characterId],
+    queryFn: ({ pageParam = 0 }) => fetchComics({ pageParam, characterId }),
     onError: error => {
-      console.error('Failed to fetch series:', error.message);
+      console.error('Failed to fetch comics:', error.message);
     },
     getNextPageParam: (lastPage, pages) =>
-      lastPage.total > pages.reduce((acc, page) => acc + page.series.length, 0)
+      lastPage.total > pages.reduce((acc, page) => acc + page.comics.length, 0)
         ? pages.length
         : undefined,
     staleTime: 12 * 60 * 60 * 1000, // It is unlikely that the information will change in less than 12 hours.
   });
 };
 
-export default useCharacterSeries;
+export default useCharacterComics;

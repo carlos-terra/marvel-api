@@ -1,19 +1,24 @@
-export interface Character {
+export interface Thumbnail {
+  path: string;
+  extension: string;
+}
+
+export interface BaseEntity {
   id: number;
-  name: string;
-  thumbnail: {
-    path: string;
-    extension: string;
-  };
+  thumbnail: Thumbnail;
   description: string;
 }
 
-export interface Series {
-  id: number;
-  title: string;
-  thumbnail: {
-    path: string;
-    extension: string;
-  };
-  description: string;
+export interface Character extends BaseEntity {
+  name: string;
 }
+
+export interface Serie extends BaseEntity {
+  title: string;
+}
+
+export interface Comic extends BaseEntity {
+  title: string;
+}
+
+export type Entity = Character | Serie | Comic;

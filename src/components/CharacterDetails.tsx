@@ -3,6 +3,7 @@ import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
 import MovieCreationIcon from '@mui/icons-material/MovieCreation';
 import { useCharacterStore } from '../store/useCharacterStore';
 import CharacterSeries from './CharacterSeries';
+import CharacterComics from './CharacterComics';
 import Tabs from './Tabs';
 import CharacterImage from './CharacterImage';
 
@@ -11,14 +12,14 @@ const CharacterDetails = () => {
   const thumbnail = useCharacterStore(s => s.selectedCharacter?.thumbnail);
   const tabs = [
     {
+      name: 'Comics',
+      icon: AutoStoriesIcon,
+      component: <CharacterComics characterId={selectedCharacter?.id} />,
+    },
+    {
       name: 'Series',
       icon: MovieCreationIcon,
       component: <CharacterSeries characterId={selectedCharacter?.id} />,
-    },
-    {
-      name: 'Comics',
-      icon: AutoStoriesIcon,
-      component: <div>1111</div>,
     },
   ];
 

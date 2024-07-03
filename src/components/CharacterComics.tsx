@@ -1,9 +1,9 @@
 import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
-import { Serie } from '../entities';
-import useCharacterSeries from '../hooks/useCharacterSeries';
+import { CircularProgress } from '@mui/material';
+import { Comic } from '../entities';
+import useCharacterComics from '../hooks/useCharacterComics';
 import Accordion from './Accordion';
 import CharacterImage from './CharacterImage';
-import { CircularProgress } from '@mui/material';
 
 const CharacterSeries = ({
   characterId,
@@ -18,7 +18,7 @@ const CharacterSeries = ({
     isFetching,
     isError,
     error,
-  } = useCharacterSeries(characterId);
+  } = useCharacterComics(characterId);
 
   if (isFetching && !isFetchingNextPage)
     return (
@@ -28,11 +28,11 @@ const CharacterSeries = ({
     );
   if (isError) return <div>Error: {(error as Error).message}</div>;
 
-  const flattenedSeries = data?.pages.flatMap(page => page.series) || [];
+  const flattenedSeries = data?.pages.flatMap(page => page.comics) || [];
 
   return (
     <div className=" flex items-center flex-col">
-      {flattenedSeries.map((series: Serie) => (
+      {flattenedSeries.map((series: Comic) => (
         <Accordion key={series.id} id={series.id} title={series.title}>
           <div className="flex">
             <CharacterImage
