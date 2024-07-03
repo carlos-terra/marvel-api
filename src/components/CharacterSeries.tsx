@@ -2,6 +2,7 @@ import React from 'react';
 import useCharacterSeries from '../hooks/useCharacterSeries';
 import { Series } from '../entities';
 import Accordion from './Accordion';
+import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
 
 const CharacterSeries = ({ characterId }: { characterId: number }) => {
   const {
@@ -22,17 +23,23 @@ const CharacterSeries = ({ characterId }: { characterId: number }) => {
       {data?.pages.map((page, i) => (
         <React.Fragment key={i}>
           {page.series.map((series: Series) => (
-            <div className="w-full mx-5" key={series.id}>
-              <Accordion title={series.title}>
-                <div>
-                  <img
-                    src={`${series.thumbnail.path}.${series.thumbnail.extension}`}
-                    alt={series.title}
-                  />
-                  <p>{series.description}</p>
-                </div>
-              </Accordion>
-            </div>
+            <Accordion id={series.id} title={series.title}>
+              <div className="flex">
+                <img
+                  src={`${series.thumbnail.path}.${series.thumbnail.extension}`}
+                  alt={series.title}
+                  className="w-1/2 h-1/2 object-cover rounded-xl"
+                />
+                <p className="pt-1 pl-4">
+                  {series.description || (
+                    <>
+                      <CommentsDisabledIcon className="mr-2" />
+                      Description Not Available
+                    </>
+                  )}
+                </p>
+              </div>
+            </Accordion>
           ))}
         </React.Fragment>
       ))}

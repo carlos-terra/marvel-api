@@ -2,25 +2,29 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MuiAccordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
+import * as React from 'react';
 
 interface Props {
+  id: number;
   title: string;
   children: React.ReactElement;
 }
 
-export default function AccordionUsage({ title, children }: Props) {
+const Accordion = ({ id, title, children }: Props) => {
   return (
-    <div>
-      <MuiAccordion>
+    <>
+      <MuiAccordion sx={{ width: '100%', margin: '0 10px' }}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1-content"
-          id="panel1-header"
+          aria-controls={`${id}-content`}
+          id={`${id}-header`}
         >
           {title}
         </AccordionSummary>
         <AccordionDetails>{children}</AccordionDetails>
       </MuiAccordion>
-    </div>
+    </>
   );
-}
+};
+
+export default Accordion;
