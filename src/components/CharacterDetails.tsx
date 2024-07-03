@@ -1,21 +1,10 @@
-import styled from '@emotion/styled';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
 import MovieCreationIcon from '@mui/icons-material/MovieCreation';
 import { useCharacterStore } from '../store/useCharacterStore';
 import CharacterSeries from './CharacterSeries';
 import Tabs from './Tabs';
-
-const Image = styled.div<{ src: string }>`
-  width: 100%;
-  padding-bottom: 100%;
-  background-size: cover;
-  background-position: center;
-  border-radius: 12px;
-  position: relative;
-  overflow: hidden;
-  background-image: url(${props => props.src});
-`;
+import CharacterImage from './CharacterImage';
 
 const CharacterDetails = () => {
   const selectedCharacter = useCharacterStore(s => s.selectedCharacter);
@@ -24,9 +13,7 @@ const CharacterDetails = () => {
     {
       name: 'Series',
       icon: MovieCreationIcon,
-      component: (
-        <CharacterSeries characterId={selectedCharacter?.id as number} />
-      ),
+      component: <CharacterSeries characterId={selectedCharacter?.id} />,
     },
     {
       name: 'Comics',
@@ -38,9 +25,8 @@ const CharacterDetails = () => {
   return (
     <div className="flex flex-col sm:flex-row px-3 pb-20 items-start">
       <div className="sm:pr-12 sm:w-2/5">
-        <Image src={`${thumbnail?.path}.${thumbnail?.extension}`} />
+        <CharacterImage src={`${thumbnail?.path}.${thumbnail?.extension}`} />
       </div>
-
       <div className="w-full sm:w-3/5 overflow-y-auto">
         <div className="text-2xl pt-2 pb-6">{selectedCharacter?.name}</div>
         {selectedCharacter?.description ? (

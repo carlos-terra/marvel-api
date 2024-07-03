@@ -12,7 +12,7 @@ const fetchCharacterSeries = async ({
   characterId,
 }: {
   pageParam: number;
-  characterId: number | null;
+  characterId: number | undefined;
 }) => {
   const MARVEL_API_KEY = import.meta.env.VITE_REACT_APP_API_KEY;
   const RESULTS_LIMIT = 20;
@@ -36,7 +36,7 @@ const fetchCharacterSeries = async ({
   }
 };
 
-const useCharacterSeries = (characterId: number | null) => {
+const useCharacterSeries = (characterId: number | undefined) => {
   return useInfiniteQuery<SeriesData, AxiosError>({
     queryKey: ['characterSeries', characterId],
     queryFn: ({ pageParam = 0 }) =>

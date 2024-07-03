@@ -42,7 +42,12 @@ const Label = styled('div')({
 const CharacterList = () => {
   const offset = usePaginationStore(s => s.offset);
 
-  const { data: characterData } = useCharacters(offset);
+  const {
+    data: characterData,
+    isLoading,
+    isError,
+    error,
+  } = useCharacters(offset);
 
   const [isModalVisible, setModalVisible] = useState(false);
 
@@ -54,29 +59,33 @@ const CharacterList = () => {
     setModalVisible(true);
   };
 
-  return characterData ? (
+  if (isError) return <div>Error: {(error as Error).message}</div>;
+
+  return (
     <>
       <Box sx={{ width: '100%' }}>
-        <Masonry columns={{ xs: 2, sm: 3, lg: 4 }} spacing={2}>
-          {characterData.characters.map(character => {
-            const { id, name } = character;
-            return (
-              <Item key={id} onClick={() => handleCharacterClick(id)}>
-                <Label>{name}</Label>
-                <Thumbnail
-                  src={`${character?.thumbnail.path}.${character?.thumbnail.extension}`}
-                  name={character?.name}
-                />
-              </Item>
-            );
-          })}
-        </Masonry>
+        {!isLoading && characterData && (
+          <Masonry columns={{ xs: 2, sm: 3, lg: 4 }} spacing={2}>
+            {characterData.characters.map(character => {
+              const { id, name } = character;
+              return (
+                <Item key={id} onClick={() => handleCharacterClick(id)}>
+                  <Label>{name}</Label>
+                  <Thumbnail
+                    src={`${character?.thumbnail.path}.${character?.thumbnail.extension}`}
+                    name={character?.name}
+                  />
+                </Item>
+              );
+            })}
+          </Masonry>
+        )}
         <Modal open={isModalVisible} onClose={() => setModalVisible(false)}>
           <CharacterDetails />
         </Modal>
       </Box>
     </>
-  ) : null;
+  );
 };
 
 export default CharacterList;

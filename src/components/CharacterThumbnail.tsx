@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 interface Props {
   src: string;
-  name?: string;
+  name: string;
   minWidth?: string;
 }
 

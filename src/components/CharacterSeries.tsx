@@ -1,10 +1,14 @@
-import React from 'react';
-import useCharacterSeries from '../hooks/useCharacterSeries';
-import { Series } from '../entities';
-import Accordion from './Accordion';
 import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
+import { Series } from '../entities';
+import useCharacterSeries from '../hooks/useCharacterSeries';
+import Accordion from './Accordion';
+import CharacterImage from './CharacterImage';
 
-const CharacterSeries = ({ characterId }: { characterId: number }) => {
+const CharacterSeries = ({
+  characterId,
+}: {
+  characterId: number | undefined;
+}) => {
   const {
     data,
     fetchNextPage,
@@ -18,30 +22,27 @@ const CharacterSeries = ({ characterId }: { characterId: number }) => {
   if (isFetching && !isFetchingNextPage) return <div>Loading...</div>;
   if (isError) return <div>Error: {(error as Error).message}</div>;
 
+  const flattenedSeries = data?.pages.flatMap(page => page.series) || [];
+
   return (
     <div className=" flex items-center flex-col">
-      {data?.pages.map((page, i) => (
-        <React.Fragment key={i}>
-          {page.series.map((series: Series) => (
-            <Accordion id={series.id} title={series.title}>
-              <div className="flex">
-                <img
-                  src={`${series.thumbnail.path}.${series.thumbnail.extension}`}
-                  alt={series.title}
-                  className="w-1/2 h-1/2 object-cover rounded-xl"
-                />
-                <p className="pt-1 pl-4">
-                  {series.description || (
-                    <>
-                      <CommentsDisabledIcon className="mr-2" />
-                      Description Not Available
-                    </>
-                  )}
-                </p>
-              </div>
-            </Accordion>
-          ))}
-        </React.Fragment>
+      {flattenedSeries.map((series: Series) => (
+        <Accordion key={series.id} id={series.id} title={series.title}>
+          <div className="flex">
+            <CharacterImage
+              src={`${series.thumbnail.path}.${series.thumbnail.extension}`}
+              width="50%"
+            />
+            <p className="pt-1 pl-4 w-1/2">
+              {series.description || (
+                <>
+                  <CommentsDisabledIcon className="mr-2" />
+                  Description Not Available
+                </>
+              )}
+            </p>
+          </div>
+        </Accordion>
       ))}
       <div className="pt-8 pb-16">
         <button
