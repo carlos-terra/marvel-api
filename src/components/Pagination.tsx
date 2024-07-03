@@ -1,7 +1,7 @@
 import MuiPagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/system';
-import useCharacters from '../hooks/useCharacters';
+import useCharacters from '../hooks/useCharactersList';
 import {
   usePaginationStore,
   setPage,
@@ -40,6 +40,7 @@ const Pagination = () => {
         variant="outlined"
         size="large"
         color="primary"
+        siblingCount={2}
         onChange={handlePageChange}
       />
     </Stack>

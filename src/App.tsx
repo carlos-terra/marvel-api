@@ -2,7 +2,7 @@ import './App.css';
 import logo from './assets/marvel-logo.svg';
 import CharacterList from './components/CharacterList';
 import Pagination from './components/Pagination';
-import useCharacters from './hooks/useCharacters';
+import useCharacters from './hooks/useCharactersList';
 import CircularProgress from '@mui/material/CircularProgress';
 import { usePaginationStore } from './store/usePaginationStore';
 

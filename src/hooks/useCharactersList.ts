@@ -7,7 +7,7 @@ interface CharactersData {
   total: number;
 }
 
-const useCharacters = (offset: number) => {
+const useCharacterList = (offset: number) => {
   return useQuery<CharactersData, AxiosError>({
     queryKey: ['characters', offset],
     queryFn: () => fetchCharacters(offset),
@@ -37,4 +37,4 @@ const fetchCharacters = async (offset?: number) => {
   }
 };
 
-export default useCharacters;
+export default useCharacterList;

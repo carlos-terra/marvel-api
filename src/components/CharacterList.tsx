@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
-import useCharacters from '../hooks/useCharacters';
+import useCharacters from '../hooks/useCharactersList';
 import { setSelectedCharacter } from '../store/useCharacterStore';
 import { usePaginationStore } from '../store/usePaginationStore';
 import Modal from './Modal';

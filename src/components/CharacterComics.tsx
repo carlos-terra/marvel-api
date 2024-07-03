@@ -1,11 +1,11 @@
 import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
 import { CircularProgress } from '@mui/material';
 import { Comic } from '../entities';
-import useCharacterComics from '../hooks/useCharacterComics';
+import useCharacter from '../hooks/useCharacter';
 import Accordion from './Accordion';
 import CharacterImage from './CharacterImage';
 
-const CharacterSeries = ({
+const CharacterComics = ({
   characterId,
 }: {
   characterId: number | undefined;
@@ -18,7 +18,7 @@ const CharacterSeries = ({
     isFetching,
     isError,
     error,
-  } = useCharacterComics(characterId);
+  } = useCharacter(characterId, 'comics');
 
   if (isFetching && !isFetchingNextPage)
     return (
@@ -28,19 +28,19 @@ const CharacterSeries = ({
     );
   if (isError) return <div>Error: {(error as Error).message}</div>;
 
-  const flattenedSeries = data?.pages.flatMap(page => page.comics) || [];
+  const flattenedComics = data?.pages.flatMap(page => page.data) || [];
 
   return (
     <div className=" flex items-center flex-col">
-      {flattenedSeries.map((series: Comic) => (
-        <Accordion key={series.id} id={series.id} title={series.title}>
+      {flattenedComics.map((comic: Comic) => (
+        <Accordion key={comic.id} id={comic.id} title={comic.title}>
           <div className="flex">
             <CharacterImage
-              src={`${series.thumbnail.path}.${series.thumbnail.extension}`}
+              src={`${comic.thumbnail.path}.${comic.thumbnail.extension}`}
               width="50%"
             />
             <p className="pt-1 pl-4 w-1/2">
-              {series.description || (
+              {comic.description || (
                 <>
                   <CommentsDisabledIcon className="mr-2" />
                   Description Not Available
@@ -75,4 +75,4 @@ const CharacterSeries = ({
   );
 };
 
-export default CharacterSeries;
+export default CharacterComics;

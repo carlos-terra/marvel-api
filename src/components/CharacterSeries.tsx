@@ -1,6 +1,6 @@
 import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
 import { Serie } from '../entities';
-import useCharacterSeries from '../hooks/useCharacterSeries';
+import useCharacter from '../hooks/useCharacter'; // Importe o novo hook
 import Accordion from './Accordion';
 import CharacterImage from './CharacterImage';
 import { CircularProgress } from '@mui/material';
@@ -18,7 +18,7 @@ const CharacterSeries = ({
     isFetching,
     isError,
     error,
-  } = useCharacterSeries(characterId);
+  } = useCharacter(characterId, 'series');
 
   if (isFetching && !isFetchingNextPage)
     return (
@@ -28,19 +28,19 @@ const CharacterSeries = ({
     );
   if (isError) return <div>Error: {(error as Error).message}</div>;
 
-  const flattenedSeries = data?.pages.flatMap(page => page.series) || [];
+  const flattenedSeries = data?.pages.flatMap(page => page.data) || [];
 
   return (
     <div className=" flex items-center flex-col">
-      {flattenedSeries.map((series: Serie) => (
-        <Accordion key={series.id} id={series.id} title={series.title}>
+      {flattenedSeries.map((serie: Serie) => (
+        <Accordion key={serie.id} id={serie.id} title={serie.title}>
           <div className="flex">
             <CharacterImage
-              src={`${series.thumbnail.path}.${series.thumbnail.extension}`}
+              src={`${serie.thumbnail.path}.${serie.thumbnail.extension}`}
               width="50%"
             />
             <p className="pt-1 pl-4 w-1/2">
-              {series.description || (
+              {serie.description || (
                 <>
                   <CommentsDisabledIcon className="mr-2" />
                   Description Not Available
