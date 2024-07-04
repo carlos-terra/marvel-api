@@ -9,7 +9,7 @@ import logo from '../../assets/marvel-logo.svg';
 interface Props {
   open: boolean;
   children: React.ReactElement;
-  onClose: () => void;
+  onClose: (open: boolean) => void;
 }
 
 const Modal = ({ open, children, onClose }: Props) => {
@@ -31,7 +31,7 @@ const Modal = ({ open, children, onClose }: Props) => {
             <div className="absolute top-0 left-0 m-4 mt-12">
               <IconButton
                 aria-label="close"
-                onClick={onClose}
+                onClick={() => onClose(true)}
                 className="focus:outline-none scale-125"
               >
                 <ArrowBackIcon />

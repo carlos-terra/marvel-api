@@ -6,28 +6,30 @@ import './App.css';
 import logo from './assets/marvel-logo.svg';
 import Details from './components/Details';
 import List from './components/List';
+import SearchFilter from './components/SearchFilter';
 import Modal from './components/lib/Modal';
 import Pagination from './components/lib/Pagination';
+import { SearchType } from './entities';
 import useCharacters from './hooks/useCharacters';
 import useSeries from './hooks/useSeries';
-import {
-  setSelectedCharacter,
-  useCharacterStore,
-} from './store/useCharacterStore';
+import { setModalClosed, useDetailsStore } from './store/useDetailsStore';
 import { usePaginationStore } from './store/usePaginationStore';
 import {
   setSearchName,
   setSearchType,
   useSearchStore,
 } from './store/useSearchStore';
-import SearchFilter from './components/SearchFilter';
-import { SearchType } from './entities';
+import styled from '@emotion/styled';
+
+const RoundedTextField = styled(TextField)`
+  & .MuiOutlinedInput-root {
+    border-radius: 12px;
+  }
+`;
 
 function App() {
   const offset = usePaginationStore(s => s.offset);
-
-  const selectedCharacter = useCharacterStore(s => s.selectedCharacter);
-
+  const isModalClosed = useDetailsStore(s => s.isModalClosed);
   const searchName = useSearchStore(s => s.searchName);
 
   const { data: charactersData, isLoading: isLoadingCharacters } =
@@ -56,7 +58,7 @@ function App() {
         alt="Marvel"
       />
       <Box sx={{ width: '100%', marginBottom: 2 }}>
-        <TextField
+        <RoundedTextField
           fullWidth
           variant="outlined"
           value={searchName}
@@ -88,10 +90,7 @@ function App() {
           )}
         </>
       )}
-      <Modal
-        open={!!selectedCharacter}
-        onClose={() => setSelectedCharacter(null)}
-      >
+      <Modal open={!isModalClosed} onClose={setModalClosed}>
         <Details />
       </Modal>
     </div>

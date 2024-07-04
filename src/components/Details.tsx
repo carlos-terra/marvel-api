@@ -1,27 +1,38 @@
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
 import MovieCreationIcon from '@mui/icons-material/MovieCreation';
-import { useCharacterStore } from '../store/useCharacterStore';
-import Series from './Series';
+import { Character, Serie } from '../entities';
+import { useDetailsStore } from '../store/useDetailsStore';
+import { useSearchStore } from '../store/useSearchStore';
 import Comics from './Comics';
-import Tabs from './lib/Tabs';
 import Image from './Image';
+import Series from './Series';
+import Tabs from './lib/Tabs';
 
 const Details = () => {
-  const selectedCharacter = useCharacterStore(s => s.selectedCharacter);
-  const thumbnail = useCharacterStore(s => s.selectedCharacter?.thumbnail);
+  const selectedItem = useDetailsStore(s => s.selectedItem);
+  const thumbnail = useDetailsStore(s => s.selectedItem?.thumbnail);
+  const searchType = useSearchStore(s => s.searchType);
+  let name: string;
+
   const tabs = [
     {
       name: 'Comics',
       icon: AutoStoriesIcon,
-      component: <Comics characterId={selectedCharacter?.id} />,
+      component: <Comics characterId={selectedItem?.id} />,
     },
     {
       name: 'Series',
       icon: MovieCreationIcon,
-      component: <Series characterId={selectedCharacter?.id} />,
+      component: <Series characterId={selectedItem?.id} />,
     },
   ];
+
+  if (selectedItem && searchType === 'characters') {
+    name = (selectedItem as Character).name;
+  } else {
+    name = (selectedItem as Serie).title;
+  }
 
   return (
     <div className="flex flex-col sm:flex-row px-3 pb-20 items-start">
@@ -29,20 +40,26 @@ const Details = () => {
         <Image src={`${thumbnail?.path}.${thumbnail?.extension}`} />
       </div>
       <div className="w-full sm:w-3/5 overflow-y-auto">
-        <div className="text-2xl pt-2 pb-6">{selectedCharacter?.name}</div>
-        {selectedCharacter?.description ? (
-          <div className="text-lg">
-            Description: {selectedCharacter?.description}
-          </div>
-        ) : (
-          <div className="text-lg">
-            <CommentsDisabledIcon className="mr-2" />
-            Description Not Avaialble
-          </div>
+        {selectedItem && (
+          <>
+            <div className="text-2xl pt-2 pb-6">{name}</div>
+            {selectedItem.description ? (
+              <div className="text-lg">
+                Description: {selectedItem.description}
+              </div>
+            ) : (
+              <div className="text-lg">
+                <CommentsDisabledIcon className="mr-2" />
+                Description Not Avaialble
+              </div>
+            )}
+            {searchType === 'characters' && (
+              <div className="mt-6">
+                <Tabs tabs={tabs} />
+              </div>
+            )}
+          </>
         )}
-        <div className="mt-6">
-          <Tabs tabs={tabs} />
-        </div>
       </div>
     </div>
   );

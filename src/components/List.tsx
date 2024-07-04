@@ -2,13 +2,13 @@ import Masonry from '@mui/lab/Masonry';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
+import { Character, Serie } from '../entities';
 import useCharacters from '../hooks/useCharacters';
-import { setSelectedCharacter } from '../store/useCharacterStore';
+import useSeries from '../hooks/useSeries';
+import { setModalClosed, setSelectedItem } from '../store/useDetailsStore';
 import { usePaginationStore } from '../store/usePaginationStore';
 import { useSearchStore } from '../store/useSearchStore';
 import Thumbnail from './Thumbnail';
-import useSeries from '../hooks/useSeries';
-import { Character, SearchType, Serie } from '../entities';
 
 const Item = styled(Paper)(({ theme }) => ({
   position: 'relative',
@@ -42,7 +42,6 @@ const Label = styled('div')({
 const List = () => {
   const offset = usePaginationStore(s => s.offset);
   const searchName = useSearchStore(s => s.searchName);
-
   const searchType = useSearchStore(s => s.searchType);
 
   const {
@@ -62,10 +61,17 @@ const List = () => {
       ? charactersData?.characters
       : seriesData?.series;
 
-  const handleCharacterClick = (id: number) => {
-    const currentCharacter =
-      charactersData?.characters.find(current => current.id === id) || null;
-    setSelectedCharacter(currentCharacter);
+  const handleItemClick = (id: number) => {
+    let selectedItem = null;
+    if (searchType === 'characters') {
+      selectedItem = charactersData?.characters.find(
+        current => current.id === id
+      );
+    } else if (searchType === 'series') {
+      selectedItem = seriesData?.series.find(current => current.id === id);
+    }
+    if (selectedItem) setSelectedItem(selectedItem);
+    setModalClosed(false);
   };
 
   if (isError) return <div>Error: {(error as Error).message}</div>;
@@ -86,10 +92,7 @@ const List = () => {
                   name = (item as Serie).title;
                 }
                 return (
-                  <Item
-                    key={item.id}
-                    onClick={() => handleCharacterClick(item.id)}
-                  >
+                  <Item key={item.id} onClick={() => handleItemClick(item.id)}>
                     <Label>{name}</Label>
                     <Thumbnail
                       src={`${item.thumbnail.path}.${item.thumbnail.extension}`}
