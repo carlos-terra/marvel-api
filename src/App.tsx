@@ -83,7 +83,7 @@ function App() {
       ) : (
         <>
           <List />
-          {listTotal && (
+          {listTotal !== 0 && (
             <div className="flex justify-center py-10">
               <Pagination />
             </div>

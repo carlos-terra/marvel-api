@@ -56,6 +56,8 @@ const List = () => {
     searchName
   );
 
+  const allLoaded = !isLoadingCharacters && !isLoadingSeries;
+
   const listData =
     searchType === 'characters'
       ? charactersData?.characters
@@ -76,34 +78,35 @@ const List = () => {
 
   if (isError) return <div>Error: {(error as Error).message}</div>;
 
+  if (allLoaded && listData?.length === 0) {
+    return <div className="mt-10">No results found</div>;
+  }
+
   return (
     <>
-      <Box sx={{ width: '100%', marginTop: '20px' }}>
-        {!isLoadingCharacters &&
-          !isLoadingSeries &&
-          listData &&
-          listData.length > 0 && (
-            <Masonry columns={{ xs: 2, sm: 3, lg: 4, xl: 5 }} spacing={2}>
-              {listData.map(item => {
-                let name: string;
-                if (searchType === 'characters') {
-                  name = (item as Character).name;
-                } else {
-                  name = (item as Serie).title;
-                }
-                return (
-                  <Item key={item.id} onClick={() => handleItemClick(item.id)}>
-                    <Label>{name}</Label>
-                    <Thumbnail
-                      src={`${item.thumbnail.path}.${item.thumbnail.extension}`}
-                      name={name}
-                    />
-                  </Item>
-                );
-              })}
-            </Masonry>
-          )}
-      </Box>
+      {allLoaded && listData && listData.length > 0 ? (
+        <Box sx={{ width: '100%', marginTop: '20px' }}>
+          <Masonry columns={{ xs: 2, sm: 3, lg: 4, xl: 5 }} spacing={2}>
+            {listData.map(item => {
+              let name: string;
+              if (searchType === 'characters') {
+                name = (item as Character).name;
+              } else {
+                name = (item as Serie).title;
+              }
+              return (
+                <Item key={item.id} onClick={() => handleItemClick(item.id)}>
+                  <Label>{name}</Label>
+                  <Thumbnail
+                    src={`${item.thumbnail.path}.${item.thumbnail.extension}`}
+                    name={name}
+                  />
+                </Item>
+              );
+            })}
+          </Masonry>
+        </Box>
+      ) : null}
     </>
   );
 };
