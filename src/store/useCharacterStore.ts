@@ -6,14 +6,16 @@ export interface CharacterState {
   selectedCharacter: Character | null;
 }
 
-const initialState: CharacterState = { selectedCharacter: null };
+const initialState: CharacterState = {
+  selectedCharacter: null,
+};
 
 export const useCharacterStore = createStore<CharacterState>(
   initialState,
   'characterStore'
 );
 
-export function setSelectedCharacter(character?: Character) {
+export function setSelectedCharacter(character: Character | null) {
   useCharacterStore.setState({ selectedCharacter: character });
 }
 

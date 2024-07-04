@@ -1,12 +1,14 @@
 import MuiPagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/system';
-import useCharacters from '../hooks/useCharactersList';
+import useCharacters from '../../hooks/useCharacters';
+import useSeries from '../../hooks/useSeries';
 import {
   usePaginationStore,
   setPage,
   setOffset,
-} from '../store/usePaginationStore';
+} from '../../store/usePaginationStore';
+import { useSearchStore } from '../../store/useSearchStore';
 
 const CustomPagination = styled(MuiPagination)(() => ({
   ul: {
@@ -24,19 +26,26 @@ const Pagination = () => {
     offset: state.offset,
   }));
 
-  const { data: characterData } = useCharacters(offset);
+  const searchName = useSearchStore(s => s.searchName);
+  const searchType = useSearchStore(s => s.searchType);
 
-  const handlePageChange = (event, value) => {
+  const { data: characterData } = useCharacters(offset, searchName);
+  const { data: seriesData } = useSeries(offset, searchName);
+
+  const total =
+    searchType === 'characters' ? characterData?.total : seriesData?.total;
+
+  const handlePageChange = (event, value: number) => {
     const newOffset = value > 1 ? (value - 1) * 20 : 0;
     setPage(value);
     setOffset(newOffset);
   };
 
-  return characterData ? (
+  return total ? (
     <Stack spacing={2}>
       <CustomPagination
         page={page}
-        count={Math.ceil(characterData?.total / PAGINATION_OFFSET)}
+        count={Math.ceil(total / PAGINATION_OFFSET)}
         variant="outlined"
         size="large"
         color="primary"

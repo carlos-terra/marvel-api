@@ -4,7 +4,7 @@ import Fade from '@mui/material/Fade';
 import IconButton from '@mui/material/IconButton';
 import MuiModal from '@mui/material/Modal';
 import { useEffect, useState } from 'react';
-import logo from '../assets/marvel-logo.svg';
+import logo from '../../assets/marvel-logo.svg';
 
 interface Props {
   open: boolean;

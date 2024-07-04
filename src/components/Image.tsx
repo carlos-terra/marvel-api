@@ -20,7 +20,7 @@ const SquareImage = styled.div<{ src: string }>`
   background-image: url(${props => props.src});
 `;
 
-const CharacterImage = ({ src, width = '100%' }: Props) => {
+const Image = ({ src, width = '100%' }: Props) => {
   return (
     <ImageContainer width={width}>
       <SquareImage src={src} />
@@ -28,4 +28,4 @@ const CharacterImage = ({ src, width = '100%' }: Props) => {
   );
 };
 
-export default CharacterImage;
+export default Image;

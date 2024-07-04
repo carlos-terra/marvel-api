@@ -1,41 +1,36 @@
-import { Thumbnail } from './../entities';
 import axios, { AxiosError } from 'axios';
 import { useInfiniteQuery } from 'react-query';
+import { Entity } from '../entities';
 
-interface Data {
-  id: number;
-  title: string;
-  thumbnail: Thumbnail;
-  description: string;
+interface EntityData {
+  data: Entity[];
+  total: number;
 }
 
-interface DataResponse {
-  data: Data[];
-  total: number;
+interface FetchDataParams {
+  pageParam?: number;
+  characterId?: number;
+  dataType?: 'comics' | 'series' | '';
 }
 
 const fetchData = async ({
   pageParam = 0,
   characterId,
-  dataType,
-}: {
-  pageParam: number;
-  characterId: number | undefined;
-  dataType: 'comics' | 'series';
-}) => {
+  dataType = '',
+}: FetchDataParams) => {
   const MARVEL_API_KEY = import.meta.env.VITE_REACT_APP_API_KEY;
   const RESULTS_LIMIT = 20;
 
   try {
     const { data } = await axios.get(
-      `https://gateway.marvel.com:443/v1/public/characters/${characterId}/${dataType}?apikey=${MARVEL_API_KEY}&offset=${
-        pageParam * RESULTS_LIMIT
-      }`
+      `https://gateway.marvel.com:443/v1/public/characters/${characterId}${
+        dataType ? `/${dataType}` : ''
+      }?apikey=${MARVEL_API_KEY}&offset=${pageParam * RESULTS_LIMIT}`
     );
     const dataItems = data?.data.results.map((item: any) => ({
       id: item.id,
       title: item.title,
-      thumbnail: item.thumbnail, // keep thumbnail as an object
+      thumbnail: item.thumbnail,
       description: item.description,
     }));
     return { data: dataItems, total: data.data.total };
@@ -45,11 +40,11 @@ const fetchData = async ({
   }
 };
 
-const useCharacter = (
+const useCharacterData = (
   characterId: number | undefined,
-  dataType: 'comics' | 'series'
+  dataType: 'comics' | 'series' | ''
 ) => {
-  return useInfiniteQuery<DataResponse, AxiosError>({
+  return useInfiniteQuery<EntityData, AxiosError>({
     queryKey: [
       `character${dataType.charAt(0).toUpperCase() + dataType.slice(1)}`,
       characterId,
@@ -67,4 +62,4 @@ const useCharacter = (
   });
 };
 
-export default useCharacter;
+export default useCharacterData;

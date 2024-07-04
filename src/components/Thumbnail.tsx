@@ -6,7 +6,7 @@ interface Props {
   minWidth?: string;
 }
 
-const Thumbnail = styled('img')<{
+const Item = styled('img')<{
   width?: string;
   minWidth?: string;
 }>(({ width = 'auto', minWidth = 'auto' }) => ({
@@ -16,12 +16,12 @@ const Thumbnail = styled('img')<{
   minWidth: minWidth,
 }));
 
-const CharacterThumbnail = ({ src, name, minWidth }: Props) => {
+const Thumbnail = ({ src, name, minWidth }: Props) => {
   return (
     <div>
-      <Thumbnail src={src} alt={name} loading="lazy" minWidth={minWidth} />
+      <Item src={src} alt={name} loading="lazy" minWidth={minWidth} />
     </div>
   );
 };
 
-export default CharacterThumbnail;
+export default Thumbnail;

@@ -22,3 +22,5 @@ export interface Comic extends BaseEntity {
 }
 
 export type Entity = Character | Serie | Comic;
+
+export type SearchType = 'characters' | 'series';

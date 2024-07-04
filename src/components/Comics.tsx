@@ -1,15 +1,11 @@
 import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
 import { CircularProgress } from '@mui/material';
-import { Comic } from '../entities';
-import useCharacter from '../hooks/useCharacter';
-import Accordion from './Accordion';
-import CharacterImage from './CharacterImage';
+import { Entity } from '../entities';
+import useCharacterData from '../hooks/useCharacterData';
+import Image from './Image';
+import Accordion from './lib/Accordion';
 
-const CharacterComics = ({
-  characterId,
-}: {
-  characterId: number | undefined;
-}) => {
+const Comics = ({ characterId }: { characterId: number | undefined }) => {
   const {
     data,
     fetchNextPage,
@@ -18,7 +14,7 @@ const CharacterComics = ({
     isFetching,
     isError,
     error,
-  } = useCharacter(characterId, 'comics');
+  } = useCharacterData(characterId, 'comics');
 
   if (isFetching && !isFetchingNextPage)
     return (
@@ -32,24 +28,30 @@ const CharacterComics = ({
 
   return (
     <div className=" flex items-center flex-col">
-      {flattenedComics.map((comic: Comic) => (
-        <Accordion key={comic.id} id={comic.id} title={comic.title}>
-          <div className="flex">
-            <CharacterImage
-              src={`${comic.thumbnail.path}.${comic.thumbnail.extension}`}
-              width="50%"
-            />
-            <p className="pt-1 pl-4 w-1/2">
-              {comic.description || (
-                <>
-                  <CommentsDisabledIcon className="mr-2" />
-                  Description Not Available
-                </>
-              )}
-            </p>
-          </div>
-        </Accordion>
-      ))}
+      {flattenedComics.map((comic: Entity) => {
+        if ('title' in comic) {
+          return (
+            <Accordion key={comic.id} id={comic.id} title={comic.title}>
+              <div className="flex">
+                <Image
+                  src={`${comic.thumbnail.path}.${comic.thumbnail.extension}`}
+                  width="50%"
+                />
+                <p className="pt-1 pl-4 w-1/2">
+                  {comic.description || (
+                    <>
+                      <CommentsDisabledIcon className="mr-2" />
+                      Description Not Available
+                    </>
+                  )}
+                </p>
+              </div>
+            </Accordion>
+          );
+        } else {
+          return null;
+        }
+      })}
       <div className="pt-8 pb-16">
         {isFetchingNextPage ? (
           <div className="flex justify-center items-start mx-auto w-full">
@@ -75,4 +77,4 @@ const CharacterComics = ({
   );
 };
 
-export default CharacterComics;
+export default Comics;
