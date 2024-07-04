@@ -8,7 +8,7 @@ $ git clone https://github.com/carlos-terra/marvel-api.git
 
 ## .env file
 
-Create a `.env file` and use your Marvel API Key in the environment variable `VITE_REACT_APP_API_KEY`. You can get your key at [Marvel Developer Portal](https://developer.marvel.com/)
+Create a `.env file` and use your Marvel API public Key in the environment variable `VITE_REACT_APP_API_KEY`. You can get your key at [Marvel Developer Portal](https://developer.marvel.com/)
 
 ## Start the React application
 
