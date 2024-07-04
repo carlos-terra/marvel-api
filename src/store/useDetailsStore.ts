@@ -20,12 +20,10 @@ export const useDetailsStore = createStore<DetailsState>(
 );
 
 export function setSelectedItem(item: Character | Serie | null) {
-  console.log('item', item);
   useDetailsStore.setState({ selectedItem: item });
 }
 
 export function setModalClosed(closed: boolean) {
-  console.log('closed', closed);
   useDetailsStore.setState({ isModalClosed: closed });
 }
 

@@ -48,12 +48,17 @@ $ npx vite build
 - [React Query](https://react-query.tanstack.com/) - Data fetching library
 - [Lodash](https://lodash.com/) - Utility library
 
+## Link to Production
+
+https://marvel-api-three-alpha.vercel.app/
+
 ## Backlog
 
 - Add unit tests
 - Add end-to-end tests
 - Implement a dashboard for characters' comics on each page
 - Translation using tokenization with two or more languages
+- Minor layout improvements for mobile devices
 
 ## Authors
 
