@@ -84,10 +84,10 @@ const List = () => {
 
   return (
     <>
-      {allLoaded && listData && listData.length > 0 ? (
+      {allLoaded ? (
         <Box sx={{ width: '100%', marginTop: '20px' }}>
           <Masonry columns={{ xs: 2, sm: 3, lg: 4, xl: 5 }} spacing={2}>
-            {listData.map(item => {
+            {listData!.map(item => {
               let name: string;
               if (searchType === 'characters') {
                 name = (item as Character).name;
