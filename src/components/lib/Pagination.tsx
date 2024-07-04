@@ -35,7 +35,10 @@ const Pagination = () => {
   const total =
     searchType === 'characters' ? characterData?.total : seriesData?.total;
 
-  const handlePageChange = (event, value: number) => {
+  const handlePageChange = (
+    _event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
     const newOffset = value > 1 ? (value - 1) * 20 : 0;
     setPage(value);
     setOffset(newOffset);

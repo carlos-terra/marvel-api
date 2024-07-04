@@ -24,7 +24,10 @@ const Tabs = ({ tabs }: Props) => {
     searchType === 'characters' ? '0' : '1'
   );
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+  const handleChange = (
+    _event: React.SyntheticEvent<Element, Event>,
+    newValue: string
+  ) => {
     setSelectedTab(newValue);
   };
 
