@@ -1,30 +1,60 @@
-# React + TypeScript + Vite
+# Marvel API
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Clone the repository
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+```bash
+$ git clone https://github.com/carlos-terra/marvel-api.git
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## .env file
+
+Create a `.env file` and use your Marvel API Key in the environment variable `VITE_REACT_APP_API_KEY`. You can get your key at [Marvel Developer Portal](https://developer.marvel.com/)
+
+## Start the React application
+
+- Open a terminal at `marvel-characters`
+
+```bash
+$ npm run dev
+```
+
+- Server will open on `http://localhost:5173/`
+
+## Install Dependencies
+
+```bash
+$ npm install
+```
+
+## Build
+
+Open a terminal at `marvel-characters`
+
+```bash
+$ npx vite build
+```
+
+## Tech Stack
+
+- [Node v20.11.1](https://nodejs.org) - The Node.js server
+- [Vite](https://vitejs.dev/) - Development server
+- [React](https://reactjs.org/) - The JavaScript library used
+- [Typescript](https://www.typescriptlang.org/) - The language used
+- [Tailwind CSS](https://tailwindcss.com/) - CSS framework
+- [emotion](https://emotion.sh/docs/introduction) - CSS-in-JS library
+- [Material-UI](https://mui.com/) - React components library
+- [Zustand](https://zustand.surge.sh/) - State management
+- [Axios](https://axios-http.com/) - HTTP client
+- [React Query](https://react-query.tanstack.com/) - Data fetching library
+- [Lodash](https://lodash.com/) - Utility library
+
+## Backlog
+
+- Add unit tests
+- Add end-to-end tests
+- Implement a dashboard for characters' comics on each page
+- Translation using tokenization with two or more languages
+
+## Authors
+
+Carlos Terra
