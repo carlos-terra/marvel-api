@@ -48,7 +48,11 @@ const Tabs = ({ tabs }: Props) => {
           </TabList>
         </Box>
         {tabs.map((tab, index) => (
-          <TabPanel key={index} value={index.toString()}>
+          <TabPanel
+            key={index}
+            value={index.toString()}
+            sx={{ paddingX: '10px' }}
+          >
             {tab.component}
           </TabPanel>
         ))}
