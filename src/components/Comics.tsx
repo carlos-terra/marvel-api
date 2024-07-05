@@ -32,19 +32,20 @@ const Comics = ({ characterId }: { characterId: number | undefined }) => {
         if ('title' in comic) {
           return (
             <Accordion key={comic.id} id={comic.id} title={comic.title}>
-              <div className="flex">
-                <Image
-                  src={`${comic.thumbnail.path}.${comic.thumbnail.extension}`}
-                  width="50%"
-                />
-                <p className="pt-1 pl-4 w-1/2">
+              <div className="overflow-auto">
+                <div className="mb-4 md:mb-0 md:float-left md:w-1/2 mr-4">
+                  <Image
+                    src={`${comic.thumbnail.path}.${comic.thumbnail.extension}`}
+                  />
+                </div>
+                <div>
                   {comic.description || (
                     <>
                       <CommentsDisabledIcon className="mr-2" />
                       Description Not Available
                     </>
                   )}
-                </p>
+                </div>
               </div>
             </Accordion>
           );

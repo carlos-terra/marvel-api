@@ -13,7 +13,7 @@ interface Props {
 const Accordion = ({ id, title, children }: Props) => {
   return (
     <>
-      <MuiAccordion sx={{ width: '100%', margin: '0 10px' }}>
+      <MuiAccordion sx={{ width: '100%' }}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls={`${id}-content`}

@@ -32,19 +32,20 @@ const Series = ({ characterId }: { characterId: number | undefined }) => {
         if ('title' in serie) {
           return (
             <Accordion key={serie.id} id={serie.id} title={serie.title}>
-              <div className="flex">
-                <Image
-                  src={`${serie.thumbnail.path}.${serie.thumbnail.extension}`}
-                  width="50%"
-                />
-                <p className="pt-1 pl-4 w-1/2">
+              <div className="overflow-auto">
+                <div className="mb-4 md:mb-0 md:float-left md:w-1/2 mr-4">
+                  <Image
+                    src={`${serie.thumbnail.path}.${serie.thumbnail.extension}`}
+                  />
+                </div>
+                <div>
                   {serie.description || (
                     <>
                       <CommentsDisabledIcon className="mr-2" />
                       Description Not Available
                     </>
                   )}
-                </p>
+                </div>
               </div>
             </Accordion>
           );
