@@ -2,10 +2,10 @@ import axios, { AxiosError } from 'axios';
 import { useQuery } from 'react-query';
 import { Serie } from '../entities';
 
-interface SeriesData {
-  series: Serie[];
+type SeriesData = {
+  series: (Omit<Serie, 'title'> & { name: string })[];
   total: number;
-}
+};
 
 const useSeries = (offset: number, title?: string) => {
   return useQuery<SeriesData, AxiosError>({

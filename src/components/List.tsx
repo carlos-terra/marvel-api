@@ -2,7 +2,6 @@ import Masonry from '@mui/lab/Masonry';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
-import { Character, Serie } from '../entities';
 import useCharacters from '../hooks/useCharacters';
 import useSeries from '../hooks/useSeries';
 import { setModalClosed, setSelectedItem } from '../store/useDetailsStore';
@@ -88,18 +87,12 @@ const List = () => {
         <Box sx={{ width: '100%', marginTop: '20px' }}>
           <Masonry columns={{ xs: 2, sm: 3, lg: 4, xl: 5 }} spacing={2}>
             {listData!.map(item => {
-              let name: string;
-              if (searchType === 'characters') {
-                name = (item as Character).name;
-              } else {
-                name = (item as Serie).title;
-              }
               return (
                 <Item key={item.id} onClick={() => handleItemClick(item.id)}>
-                  <Label>{name}</Label>
+                  <Label>{item.name}</Label>
                   <Thumbnail
                     src={`${item.thumbnail.path}.${item.thumbnail.extension}`}
-                    name={name}
+                    name={item.name}
                   />
                 </Item>
               );
