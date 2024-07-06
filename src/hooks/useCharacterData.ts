@@ -1,17 +1,19 @@
 import axios, { AxiosError } from 'axios';
 import { useInfiniteQuery } from 'react-query';
-import { Character, ListData, Serie } from '../entities';
+import { ListData } from '../entities';
+
+type DataType = 'comics' | 'series' | '';
 
 interface FetchDataParams {
   pageParam?: number;
   characterId?: number;
-  dataType: 'comics' | 'series' | '';
+  dataType: DataType;
 }
 
-async function fetchData<T extends Character | Serie>({
+async function fetchData<T>({
   pageParam = 0,
   characterId,
-  dataType = '',
+  dataType,
 }: FetchDataParams): Promise<ListData<T>> {
   const MARVEL_API_KEY = import.meta.env.VITE_REACT_APP_API_KEY;
   const RESULTS_LIMIT = 20;
@@ -22,12 +24,12 @@ async function fetchData<T extends Character | Serie>({
         dataType ? `/${dataType}` : ''
       }?apikey=${MARVEL_API_KEY}&offset=${pageParam * RESULTS_LIMIT}`
     );
-    const items = data?.data.results.map((item: any) => ({
+    const items: T[] = data?.data.results.map((item: any) => ({
       id: item.id,
-      name: item.title,
+      title: item.title,
       thumbnail: item.thumbnail,
       description: item.description,
-    })) as T[];
+    }));
     return { data: items, total: data.data.total };
   } catch (error) {
     const axiosError = error as AxiosError;
@@ -35,9 +37,9 @@ async function fetchData<T extends Character | Serie>({
   }
 }
 
-function useCharacterData<T extends Character | Serie>(
+function useCharacterData<T>(
   characterId: number | undefined,
-  dataType: 'comics' | 'series' | ''
+  dataType: DataType
 ) {
   return useInfiniteQuery<ListData<T>, AxiosError>({
     queryKey: [

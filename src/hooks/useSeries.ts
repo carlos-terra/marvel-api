@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { useQuery } from 'react-query';
-import { ApiSerie, ListData, Serie } from '../entities';
+import { ListData, Serie } from '../entities';
 
 const useSeries = (offset: number, title?: string) => {
   return useQuery<ListData<Serie>, AxiosError>({
@@ -21,7 +21,7 @@ const fetchSeries = async (offset?: number, title?: string) => {
         title ? `&titleStartsWith=${title}` : ''
       }`
     );
-    const series = data?.data.results.map((serie: ApiSerie) => ({
+    const series = data?.data.results.map((serie: Serie) => ({
       id: serie.id,
       name: serie.title,
       thumbnail: serie.thumbnail,

@@ -34,7 +34,9 @@ const Details = () => {
       </div>
       <div className="w-full sm:w-3/5 overflow-y-auto">
         <>
-          <div className="text-2xl pt-2 pb-6">{selectedItem.name}</div>
+          <div className="text-2xl pt-2 pb-6">
+            {'name' in selectedItem ? selectedItem.name : selectedItem.title}
+          </div>
           {selectedItem.description ? (
             <div className="text-lg">
               Description: {selectedItem.description}

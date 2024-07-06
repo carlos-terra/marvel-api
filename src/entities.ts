@@ -13,14 +13,12 @@ export interface Character extends ApiBaseEntity {
   name: string;
 }
 
-export interface ApiSerie extends ApiBaseEntity {
+export interface Serie extends ApiBaseEntity {
   title: string;
 }
 
-export type Serie = Omit<ApiSerie, 'title'> & { name: string };
-
 export interface Comic extends ApiBaseEntity {
-  name: string;
+  title: string;
 }
 
 export interface ListData<T> {

@@ -14,7 +14,7 @@ const Series = ({ characterId }: { characterId: number | undefined }) => {
     isFetching,
     isError,
     error,
-  } = useCharacterData(characterId, 'series');
+  } = useCharacterData<Serie>(characterId, 'series');
 
   if (isFetching && !isFetchingNextPage)
     return (
@@ -30,7 +30,7 @@ const Series = ({ characterId }: { characterId: number | undefined }) => {
     <div className=" flex items-center flex-col">
       {flattenedSeries.map((serie: Serie) => {
         return (
-          <Accordion key={serie.id} id={serie.id} title={serie.name}>
+          <Accordion key={serie.id} id={serie.id} title={serie.title}>
             <div className="overflow-auto">
               <div className="mb-4 md:mb-0 md:float-left md:w-1/2 mr-4">
                 <Image

@@ -1,4 +1,4 @@
-import { Character, Serie, ListData, ApiBaseEntity } from '../entities';
+import { Character, Serie, ListData } from '../entities';
 import Masonry from '@mui/lab/Masonry';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -10,7 +10,8 @@ import { usePaginationStore } from '../store/usePaginationStore';
 import { useSearchStore } from '../store/useSearchStore';
 import Thumbnail from './Thumbnail';
 
-type ItemsData = ListData<Character> | ListData<Serie> | undefined;
+type CharacterList = ListData<Character>;
+type SeriesList = ListData<Serie>;
 
 const Item = styled(Paper)(({ theme }) => ({
   position: 'relative',
@@ -62,7 +63,7 @@ const List = () => {
 
   const allLoaded = !isLoadingCharacters && !isLoadingSeries;
 
-  const itemsData: ItemsData =
+  const itemsData: CharacterList | SeriesList | undefined =
     searchType === 'characters' ? charactersData : seriesData;
 
   const handleItemClick = (id: number) => {
@@ -87,13 +88,13 @@ const List = () => {
       {allLoaded ? (
         <Box sx={{ width: '100%', marginTop: '20px' }}>
           <Masonry columns={{ xs: 2, sm: 3, lg: 4, xl: 5 }} spacing={2}>
-            {itemsData!.data.map((item: Character | Serie) => {
+            {itemsData!.data.map(item => {
               return (
                 <Item key={item.id} onClick={() => handleItemClick(item.id)}>
-                  <Label>{item.name}</Label>
+                  <Label> {'name' in item ? item.name : item.title}</Label>
                   <Thumbnail
                     src={`${item.thumbnail.path}.${item.thumbnail.extension}`}
-                    name={item.name}
+                    name={'name' in item ? item.name : item.title}
                   />
                 </Item>
               );

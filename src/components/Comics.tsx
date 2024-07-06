@@ -14,7 +14,7 @@ const Comics = ({ characterId }: { characterId: number | undefined }) => {
     isFetching,
     isError,
     error,
-  } = useCharacterData(characterId, 'comics');
+  } = useCharacterData<Comic>(characterId, 'comics');
 
   if (isFetching && !isFetchingNextPage)
     return (
@@ -30,7 +30,7 @@ const Comics = ({ characterId }: { characterId: number | undefined }) => {
     <div className=" flex items-center flex-col">
       {flattenedComics.map((comic: Comic) => {
         return (
-          <Accordion key={comic.id} id={comic.id} title={comic.name}>
+          <Accordion key={comic.id} id={comic.id} title={comic.title}>
             <div className="overflow-auto">
               <div className="mb-4 md:mb-0 md:float-left md:w-1/2 mr-4">
                 <Image
