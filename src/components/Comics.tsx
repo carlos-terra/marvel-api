@@ -27,7 +27,7 @@ const Comics = ({ characterId }: { characterId: number | undefined }) => {
   const flattenedComics = data?.pages.flatMap(page => page.data) || [];
 
   return (
-    <div className=" flex items-center flex-col">
+    <div className="flex items-center flex-col">
       {flattenedComics.map((comic: Comic) => {
         return (
           <Accordion key={comic.id} id={comic.id} title={comic.title}>

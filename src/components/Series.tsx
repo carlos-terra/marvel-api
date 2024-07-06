@@ -27,7 +27,7 @@ const Series = ({ characterId }: { characterId: number | undefined }) => {
   const flattenedSeries = data?.pages.flatMap(page => page.data) || [];
 
   return (
-    <div className=" flex items-center flex-col">
+    <div className="flex items-center flex-col">
       {flattenedSeries.map((serie: Serie) => {
         return (
           <Accordion key={serie.id} id={serie.id} title={serie.title}>
