@@ -1,14 +1,9 @@
 import axios, { AxiosError } from 'axios';
-import { Character } from '../entities';
 import { useQuery } from 'react-query';
-
-interface CharactersData {
-  characters: Character[];
-  total: number;
-}
+import { Character, ListData } from '../entities';
 
 const useCharacters = (offset: number, name?: string) => {
-  return useQuery<CharactersData, AxiosError>({
+  return useQuery<ListData<Character>, AxiosError>({
     queryKey: ['characters', offset, name],
     queryFn: () => fetchCharacters(offset, name),
     onError: error => {
@@ -32,7 +27,7 @@ const fetchCharacters = async (offset?: number, name?: string) => {
       thumbnail: character.thumbnail,
       description: character.description,
     }));
-    return { characters, total: data.data.total };
+    return { data: characters, total: data.data.total };
   } catch (error) {
     const axiosError = error as AxiosError;
     throw new Error(

@@ -3,24 +3,29 @@ export interface Thumbnail {
   extension: string;
 }
 
-export interface BaseEntity {
+export interface ApiBaseEntity {
   id: number;
   thumbnail: Thumbnail;
   description: string;
 }
 
-export interface Character extends BaseEntity {
+export interface Character extends ApiBaseEntity {
   name: string;
 }
 
-export interface Serie extends BaseEntity {
+export interface ApiSerie extends ApiBaseEntity {
   title: string;
 }
 
-export interface Comic extends BaseEntity {
-  title: string;
+export type Serie = Omit<ApiSerie, 'title'> & { name: string };
+
+export interface Comic extends ApiBaseEntity {
+  name: string;
 }
 
-export type Entity = Character | Serie | Comic;
+export interface ListData<T> {
+  data: T[];
+  total: number;
+}
 
 export type SearchType = 'characters' | 'series';

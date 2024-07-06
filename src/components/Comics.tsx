@@ -1,6 +1,6 @@
 import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
 import { CircularProgress } from '@mui/material';
-import { Entity } from '../entities';
+import { Comic } from '../entities';
 import useCharacterData from '../hooks/useCharacterData';
 import Image from './Image';
 import Accordion from './lib/Accordion';
@@ -28,30 +28,26 @@ const Comics = ({ characterId }: { characterId: number | undefined }) => {
 
   return (
     <div className=" flex items-center flex-col">
-      {flattenedComics.map((comic: Entity) => {
-        if ('title' in comic) {
-          return (
-            <Accordion key={comic.id} id={comic.id} title={comic.title}>
-              <div className="overflow-auto">
-                <div className="mb-4 md:mb-0 md:float-left md:w-1/2 mr-4">
-                  <Image
-                    src={`${comic.thumbnail.path}.${comic.thumbnail.extension}`}
-                  />
-                </div>
-                <div>
-                  {comic.description || (
-                    <>
-                      <CommentsDisabledIcon className="mr-2" />
-                      Description Not Available
-                    </>
-                  )}
-                </div>
+      {flattenedComics.map((comic: Comic) => {
+        return (
+          <Accordion key={comic.id} id={comic.id} title={comic.name}>
+            <div className="overflow-auto">
+              <div className="mb-4 md:mb-0 md:float-left md:w-1/2 mr-4">
+                <Image
+                  src={`${comic.thumbnail.path}.${comic.thumbnail.extension}`}
+                />
               </div>
-            </Accordion>
-          );
-        } else {
-          return null;
-        }
+              <div>
+                {comic.description || (
+                  <>
+                    <CommentsDisabledIcon className="mr-2" />
+                    Description Not Available
+                  </>
+                )}
+              </div>
+            </div>
+          </Accordion>
+        );
       })}
       <div className="pt-8 pb-16">
         {isFetchingNextPage ? (

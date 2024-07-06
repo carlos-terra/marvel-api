@@ -1,3 +1,4 @@
+import { Character, Serie, ListData, ApiBaseEntity } from '../entities';
 import Masonry from '@mui/lab/Masonry';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -8,6 +9,8 @@ import { setModalClosed, setSelectedItem } from '../store/useDetailsStore';
 import { usePaginationStore } from '../store/usePaginationStore';
 import { useSearchStore } from '../store/useSearchStore';
 import Thumbnail from './Thumbnail';
+
+type ItemsData = ListData<Character> | ListData<Serie> | undefined;
 
 const Item = styled(Paper)(({ theme }) => ({
   position: 'relative',
@@ -59,30 +62,24 @@ const List = () => {
 
   const allLoaded = !isLoadingCharacters && !isLoadingSeries;
 
-  const listData =
-    searchType === 'characters'
-      ? charactersData?.characters
-      : seriesData?.series;
+  const itemsData: ItemsData =
+    searchType === 'characters' ? charactersData : seriesData;
 
   const handleItemClick = (id: number) => {
-    let selectedItem = null;
-    if (searchType === 'characters') {
-      selectedItem = charactersData?.characters.find(
-        current => current.id === id
-      );
-    } else if (searchType === 'series') {
-      selectedItem = seriesData?.series.find(current => current.id === id);
-    }
+    let selectedItem = itemsData?.data.find(
+      (current: Character | Serie) => current.id === id
+    );
+
     if (selectedItem) {
       setSelectedItem(selectedItem);
+      setModalClosed(false);
     }
-    setModalClosed(false);
   };
 
   if (isError) return <div>Error: {(error as Error).message}</div>;
 
-  if (allLoaded && listData?.length === 0) {
-    return <div className="mt-10">No results found</div>;
+  if (allLoaded && itemsData?.data.length === 0) {
+    return <div>No items found</div>;
   }
 
   return (
@@ -90,7 +87,7 @@ const List = () => {
       {allLoaded ? (
         <Box sx={{ width: '100%', marginTop: '20px' }}>
           <Masonry columns={{ xs: 2, sm: 3, lg: 4, xl: 5 }} spacing={2}>
-            {listData!.map(item => {
+            {itemsData!.data.map((item: Character | Serie) => {
               return (
                 <Item key={item.id} onClick={() => handleItemClick(item.id)}>
                   <Label>{item.name}</Label>

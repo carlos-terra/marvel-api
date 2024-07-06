@@ -1,14 +1,9 @@
 import axios, { AxiosError } from 'axios';
 import { useQuery } from 'react-query';
-import { Serie } from '../entities';
-
-type SeriesData = {
-  series: (Omit<Serie, 'title'> & { name: string })[];
-  total: number;
-};
+import { ApiSerie, ListData, Serie } from '../entities';
 
 const useSeries = (offset: number, title?: string) => {
-  return useQuery<SeriesData, AxiosError>({
+  return useQuery<ListData<Serie>, AxiosError>({
     queryKey: ['series', offset, title],
     queryFn: () => fetchSeries(offset, title),
     onError: error => {
@@ -26,13 +21,13 @@ const fetchSeries = async (offset?: number, title?: string) => {
         title ? `&titleStartsWith=${title}` : ''
       }`
     );
-    const series = data?.data.results.map((serie: Serie) => ({
+    const series = data?.data.results.map((serie: ApiSerie) => ({
       id: serie.id,
       name: serie.title,
       thumbnail: serie.thumbnail,
       description: serie.description,
     }));
-    return { series, total: data.data.total };
+    return { data: series, total: data.data.total };
   } catch (error) {
     const axiosError = error as AxiosError;
     throw new Error(

@@ -1,23 +1,18 @@
 import axios, { AxiosError } from 'axios';
 import { useInfiniteQuery } from 'react-query';
-import { Entity } from '../entities';
-
-interface EntityData {
-  data: Entity[];
-  total: number;
-}
+import { Character, ListData, Serie } from '../entities';
 
 interface FetchDataParams {
   pageParam?: number;
   characterId?: number;
-  dataType?: 'comics' | 'series' | '';
+  dataType: 'comics' | 'series' | '';
 }
 
-const fetchData = async ({
+async function fetchData<T extends Character | Serie>({
   pageParam = 0,
   characterId,
   dataType = '',
-}: FetchDataParams) => {
+}: FetchDataParams): Promise<ListData<T>> {
   const MARVEL_API_KEY = import.meta.env.VITE_REACT_APP_API_KEY;
   const RESULTS_LIMIT = 20;
 
@@ -27,30 +22,30 @@ const fetchData = async ({
         dataType ? `/${dataType}` : ''
       }?apikey=${MARVEL_API_KEY}&offset=${pageParam * RESULTS_LIMIT}`
     );
-    const dataItems = data?.data.results.map((item: any) => ({
+    const items = data?.data.results.map((item: any) => ({
       id: item.id,
-      title: item.title,
+      name: item.title,
       thumbnail: item.thumbnail,
       description: item.description,
-    }));
-    return { data: dataItems, total: data.data.total };
+    })) as T[];
+    return { data: items, total: data.data.total };
   } catch (error) {
     const axiosError = error as AxiosError;
     throw new Error(`Failed to fetch ${dataType}: ${axiosError.message}`);
   }
-};
+}
 
-const useCharacterData = (
+function useCharacterData<T extends Character | Serie>(
   characterId: number | undefined,
   dataType: 'comics' | 'series' | ''
-) => {
-  return useInfiniteQuery<EntityData, AxiosError>({
+) {
+  return useInfiniteQuery<ListData<T>, AxiosError>({
     queryKey: [
       `character${dataType.charAt(0).toUpperCase() + dataType.slice(1)}`,
       characterId,
     ],
     queryFn: ({ pageParam = 0 }) =>
-      fetchData({ pageParam, characterId, dataType }),
+      fetchData<T>({ pageParam, characterId, dataType }),
     onError: error => {
       console.error(`Failed to fetch ${dataType}:`, error.message);
     },
@@ -60,6 +55,6 @@ const useCharacterData = (
         : undefined,
     staleTime: 12 * 60 * 60 * 1000, // It is unlikely that the information will change in less than 12 hours.
   });
-};
+}
 
 export default useCharacterData;
