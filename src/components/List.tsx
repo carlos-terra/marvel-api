@@ -32,10 +32,12 @@ const Label = styled('div')({
   backgroundColor: 'rgba(0, 0, 0, 0.5)',
   color: '#fff',
   padding: '0.5em',
-  boxSizing: 'border-box',
   borderRadius: 12,
   fontSize: '1.1rem',
   fontWeight: 'bold',
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
 });
 
 const List = () => {
@@ -71,7 +73,9 @@ const List = () => {
     } else if (searchType === 'series') {
       selectedItem = seriesData?.series.find(current => current.id === id);
     }
-    if (selectedItem) setSelectedItem(selectedItem);
+    if (selectedItem) {
+      setSelectedItem(selectedItem);
+    }
     setModalClosed(false);
   };
 
