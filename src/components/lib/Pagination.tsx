@@ -1,14 +1,15 @@
 import MuiPagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/system';
-import useCharacters from '../../hooks/useCharacters';
-import useSeries from '../../hooks/useSeries';
 import {
-  usePaginationStore,
-  setPage,
   setOffset,
+  setPage,
+  usePaginationStore,
 } from '../../store/usePaginationStore';
-import { useSearchStore } from '../../store/useSearchStore';
+
+interface Props {
+  total: number;
+}
 
 const CustomPagination = styled(MuiPagination)(() => ({
   ul: {
@@ -18,22 +19,13 @@ const CustomPagination = styled(MuiPagination)(() => ({
   },
 }));
 
-const Pagination = () => {
+const Pagination = ({ total }: Props) => {
   const PAGINATION_OFFSET = 20;
 
-  const { page, offset } = usePaginationStore(state => ({
+  const { page } = usePaginationStore(state => ({
     page: state.page,
     offset: state.offset,
   }));
-
-  const searchName = useSearchStore(s => s.searchName);
-  const searchType = useSearchStore(s => s.searchType);
-
-  const { data: characterData } = useCharacters(offset, searchName);
-  const { data: seriesData } = useSeries(offset, searchName);
-
-  const total =
-    searchType === 'characters' ? characterData?.total : seriesData?.total;
 
   const handlePageChange = (
     _event: React.ChangeEvent<unknown>,
@@ -44,7 +36,7 @@ const Pagination = () => {
     setOffset(newOffset);
   };
 
-  return total ? (
+  return total > 0 ? (
     <Stack spacing={2}>
       <CustomPagination
         page={page}

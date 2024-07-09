@@ -6,7 +6,7 @@ export interface PaginationState {
   offset: number;
 }
 
-const initialState: PaginationState = { page: 1, offset: 1 };
+const initialState: PaginationState = { page: 1, offset: 0 };
 
 export const usePaginationStore = createStore<PaginationState>(
   initialState,

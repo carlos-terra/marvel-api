@@ -9,9 +9,8 @@ import { setModalClosed, setSelectedItem } from '../store/useDetailsStore';
 import { usePaginationStore } from '../store/usePaginationStore';
 import { useSearchStore } from '../store/useSearchStore';
 import Thumbnail from './Thumbnail';
-
-type CharacterList = ListData<Character>;
-type SeriesList = ListData<Serie>;
+import { UseQueryResult } from 'react-query';
+import { AxiosError } from 'axios';
 
 const Item = styled(Paper)(({ theme }) => ({
   position: 'relative',
@@ -49,25 +48,21 @@ const List = () => {
   const searchName = useSearchStore(s => s.searchName);
   const searchType = useSearchStore(s => s.searchType);
 
-  const {
-    data: charactersData,
-    isLoading: isLoadingCharacters,
-    isError,
-    error,
-  } = useCharacters(offset, searchName);
+  let apiData:
+    | UseQueryResult<ListData<Character>, AxiosError<unknown, any>>
+    | UseQueryResult<ListData<Serie>, AxiosError<unknown, any>>;
 
-  const { data: seriesData, isLoading: isLoadingSeries } = useSeries(
-    offset,
-    searchName
-  );
+  if (searchType === 'characters') {
+    apiData = useCharacters(offset, searchName);
+  } else {
+    apiData = useSeries(offset, searchName);
+  }
 
-  const allLoaded = !isLoadingCharacters && !isLoadingSeries;
-
-  const itemsData: CharacterList | SeriesList | undefined =
-    searchType === 'characters' ? charactersData : seriesData;
+  const { data: listData, isLoading, isError, error } = apiData;
+  const total = listData?.total || 0;
 
   const handleItemClick = (id: number) => {
-    let selectedItem = itemsData?.data.find(
+    let selectedItem = listData?.data.find(
       (current: Character | Serie) => current.id === id
     );
 
@@ -79,16 +74,15 @@ const List = () => {
 
   if (isError) return <div>Error: {(error as Error).message}</div>;
 
-  if (allLoaded && itemsData?.data.length === 0) {
+  if (!isLoading && (!listData || listData.data.length === 0)) {
     return <div>No items found</div>;
   }
 
   return (
-    <>
-      {allLoaded ? (
-        <Box sx={{ width: '100%', marginTop: '20px' }}>
-          <Masonry columns={{ xs: 2, sm: 3, lg: 4, xl: 5 }} spacing={2}>
-            {itemsData!.data.map(item => {
+    <Box sx={{ width: '100%', marginTop: '20px' }}>
+      <Masonry columns={{ xs: 2, sm: 3, lg: 4, xl: 5 }} spacing={2}>
+        {listData && total > 0
+          ? listData.data?.map((item: Character | Serie) => {
               return (
                 <Item key={item.id} onClick={() => handleItemClick(item.id)}>
                   <Label> {'name' in item ? item.name : item.title}</Label>
@@ -98,11 +92,10 @@ const List = () => {
                   />
                 </Item>
               );
-            })}
-          </Masonry>
-        </Box>
-      ) : null}
-    </>
+            })
+          : []}
+      </Masonry>
+    </Box>
   );
 };
 
